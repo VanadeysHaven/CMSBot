@@ -17,4 +17,6 @@ public class Constants {
 
     public static long LOG_CHANNEL = 274542577880006656L;
 
+    public static String commandInvoker = "cms";
+
 }

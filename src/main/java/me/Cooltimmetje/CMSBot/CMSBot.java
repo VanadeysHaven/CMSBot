@@ -1,5 +1,6 @@
 package me.Cooltimmetje.CMSBot;
 
+import me.Cooltimmetje.CMSBot.Commands.CommandManager;
 import me.Cooltimmetje.CMSBot.Utilities.Constants;
 import me.Cooltimmetje.CMSBot.Utilities.Logger;
 import me.Cooltimmetje.CMSBot.Utilities.MessagesUtils;
@@ -68,6 +69,8 @@ public class CMSBot {
     public void onReady(ReadyEvent event){
         if(!listenersReady){
             event.getClient().changePlayingText("boop");
+            cmsBot.getDispatcher().registerListener(new CommandManager());
+            cmsBot.getDispatcher().registerListener(new MessagesUtils());
 
             listenersReady = true;
 //            Runtime.getRuntime().addShutdownHook(new Thread(() -> ));

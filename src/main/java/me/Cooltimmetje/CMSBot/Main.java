@@ -41,6 +41,7 @@ public class Main {
             throw new IllegalArgumentException("I need a Discord Token, Mysql Username, Mysql Password, Twitch Username and Twitch Token.");
         } else {
             log.info("Setting up...");
+            log.info("Hello world!");
             cmsBot = new CMSBot(args[0]);
 
             MySqlManager.setupHikari(args[1],args[2]);
