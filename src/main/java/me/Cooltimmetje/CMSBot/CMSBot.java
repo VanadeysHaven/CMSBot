@@ -1,6 +1,8 @@
 package me.Cooltimmetje.CMSBot;
 
+import com.mysql.jdbc.authentication.MysqlClearPasswordPlugin;
 import me.Cooltimmetje.CMSBot.Commands.CommandManager;
+import me.Cooltimmetje.CMSBot.Profiles.MySqlManager;
 import me.Cooltimmetje.CMSBot.Utilities.Constants;
 import me.Cooltimmetje.CMSBot.Utilities.Logger;
 import me.Cooltimmetje.CMSBot.Utilities.MessagesUtils;
@@ -71,6 +73,8 @@ public class CMSBot {
             event.getClient().changePlayingText("boop");
             cmsBot.getDispatcher().registerListener(new CommandManager());
             cmsBot.getDispatcher().registerListener(new MessagesUtils());
+
+            MySqlManager.getChannels();
 
             listenersReady = true;
 //            Runtime.getRuntime().addShutdownHook(new Thread(() -> ));

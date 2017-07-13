@@ -27,6 +27,10 @@ public class CommandManager {
                     break;
                 case "lookup":
                     RequestRecord.run(command, event.getMessage());
+                    break;
+                case "channels":
+                    TwitchChannelManager.run(command, event.getMessage());
+                    break;
             }
         }
     }

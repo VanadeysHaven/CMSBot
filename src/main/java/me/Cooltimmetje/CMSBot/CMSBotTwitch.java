@@ -54,6 +54,24 @@ public class CMSBotTwitch extends PircBot {
     }
 
     /**
+     * Message received event.
+     *
+     * @param channel Channel where the message was received.
+     * @param sender Sender of the message.
+     * @param login Our login.
+     * @param hostname Hostname of the channel.
+     * @param message Message content.
+     */
+    @Override
+    @SuppressWarnings("ConstantConditions")
+    protected void onMessage(String channel, String sender, String login, String hostname, String message) {
+        if(message.startsWith("!riot")){
+            sendMessage(channel, "(╯°□°）╯︵ ┻━┻");
+        }
+    }
+
+
+    /**
      * Channel join event.
      *
      * @param channel IRC channel that was joined.
@@ -109,17 +127,20 @@ public class CMSBotTwitch extends PircBot {
      * Used to send a message.
      *
      * @param message The message that we want to send.
-     * @param channel The channel where we want to send.
+     * @param channel The channel where we want to send. (Without #)
      */
     public void send(String message, String channel){
         sendMessage("#" + channel, message);
     }
 
-//    public void joinChannels(){
-//        for(String string : ServerManager.twitchServers.keySet()){
-//            Main.getSkuddbotTwitch().joinChannel("#" + string);
-//        }
-//    }
+    /**
+     * Join all channels.
+     */
+    public void joinChannels(){
+        for(String string : Constants.twitchChannels){
+            join(string);
+        }
+    }
 
 
 }

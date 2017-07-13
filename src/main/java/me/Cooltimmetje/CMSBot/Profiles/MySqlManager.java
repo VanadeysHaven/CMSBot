@@ -1,6 +1,8 @@
 package me.Cooltimmetje.CMSBot.Profiles;
 
 import com.zaxxer.hikari.HikariDataSource;
+import me.Cooltimmetje.CMSBot.Main;
+import me.Cooltimmetje.CMSBot.Utilities.Constants;
 import org.json.simple.parser.ParseException;
 
 import java.sql.Connection;
@@ -133,6 +135,126 @@ public class MySqlManager {
             if(ps != null){
                 try {
                     ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * Add a new Twitch Channel to the database.
+     *
+     * @param channel The channel to be added.
+     */
+    public static void addChannel(String channel){
+        Connection c = null;
+        PreparedStatement ps = null;
+
+        String query = "INSERT INTO twitch_channels VALUES(?);";
+
+        try {
+            c = hikari.getConnection();
+            ps = c.prepareStatement(query);
+
+            ps.setString(1, channel);
+
+            ps.execute();
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            if(c != null){
+                try {
+                    c.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(ps != null){
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * Remove a Twitch Channel from the database.
+     *
+     * @param channel The channel to be removed.
+     */
+    public static void removeChannel(String channel){
+        Connection c = null;
+        PreparedStatement ps = null;
+
+        String query = "DELETE FROM twitch_channels WHERE twitch_channel=?;";
+
+        try {
+            c = hikari.getConnection();
+            ps = c.prepareStatement(query);
+
+            ps.setString(1, channel);
+
+            ps.execute();
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            if(c != null){
+                try {
+                    c.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(ps != null){
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void getChannels(){
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String query = "SELECT * FROM twitch_channels;";
+
+        try {
+            c = hikari.getConnection();
+            ps = c.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while(rs.next()){
+                Constants.twitchChannels.add(rs.getString(1));
+            }
+
+            Main.getCmsBotTwitch().joinChannels();
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            if(c != null){
+                try {
+                    c.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(ps != null){
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(rs != null){
+                try {
+                    rs.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

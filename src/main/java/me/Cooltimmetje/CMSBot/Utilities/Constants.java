@@ -1,5 +1,7 @@
 package me.Cooltimmetje.CMSBot.Utilities;
 
+import java.util.ArrayList;
+
 /**
  * Holding several constants for easy recalling throughout the code.
  *
@@ -11,6 +13,11 @@ public class Constants {
 
     public static String TIMMY_OVERRIDE = "76593288865394688";
     public static String JASCH_OVERRIDE = "148376320726794240";
+
+    public static String CMS_SERVER = "224987945638035456";
+    public static String ADMIN_ROLE = "Admin";
+
+    public static ArrayList<String> twitchChannels = new ArrayList<>();
 
     public static String twitchBot;
     public static String twitchOauth;
