@@ -3,6 +3,7 @@ package me.Cooltimmetje.CMSBot.Profiles;
 import com.zaxxer.hikari.HikariDataSource;
 import me.Cooltimmetje.CMSBot.Main;
 import me.Cooltimmetje.CMSBot.Utilities.Constants;
+import me.Cooltimmetje.CMSBot.Utilities.Logger;
 import org.json.simple.parser.ParseException;
 
 import java.sql.Connection;
@@ -122,6 +123,7 @@ public class MySqlManager {
             ps.setString(3, viewer.getJSON());
 
             ps.execute();
+            Logger.info("[ProfileSave] Saving profile for: " + viewer.getUsername());
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

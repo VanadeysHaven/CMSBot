@@ -2,7 +2,9 @@ package me.Cooltimmetje.CMSBot;
 
 import com.mysql.jdbc.authentication.MysqlClearPasswordPlugin;
 import me.Cooltimmetje.CMSBot.Commands.CommandManager;
+import me.Cooltimmetje.CMSBot.Profiles.CMSViewer;
 import me.Cooltimmetje.CMSBot.Profiles.MySqlManager;
+import me.Cooltimmetje.CMSBot.Profiles.ProfileManager;
 import me.Cooltimmetje.CMSBot.Utilities.Constants;
 import me.Cooltimmetje.CMSBot.Utilities.Logger;
 import me.Cooltimmetje.CMSBot.Utilities.MessagesUtils;
@@ -77,7 +79,7 @@ public class CMSBot {
             MySqlManager.getChannels();
 
             listenersReady = true;
-//            Runtime.getRuntime().addShutdownHook(new Thread(() -> ));
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> terminate(true)));
             MessagesUtils.sendPlain(":robot: Startup sequence complete!", cmsBot.getChannelByID(Constants.LOG_CHANNEL), false);
         }
     }
@@ -119,6 +121,10 @@ public class CMSBot {
             cmsBot.logout();
         } catch (DiscordException e) {
             Logger.warn("Couldn't log out.", e);
+        }
+
+        for(CMSViewer viewer : ProfileManager.profiles.values()){
+            MySqlManager.saveUserData(viewer);
         }
     }
 

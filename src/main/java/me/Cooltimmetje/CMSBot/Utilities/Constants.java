@@ -17,6 +17,8 @@ public class Constants {
     public static String CMS_SERVER = "224987945638035456";
     public static String ADMIN_ROLE = "Admin";
 
+    public static int HOUR_COUNT_DELAY = 360000;
+
     public static ArrayList<String> twitchChannels = new ArrayList<>();
 
     public static String twitchBot;

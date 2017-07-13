@@ -2,6 +2,7 @@ package me.Cooltimmetje.CMSBot.Profiles;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.Cooltimmetje.CMSBot.Utilities.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -54,6 +55,8 @@ public class CMSViewer {
      */
     public CMSViewer(String username){
         this.username = username;
+
+        Logger.info("[ProfileCreate] Creating new profile for: " + username);
     }
 
     /**
@@ -75,6 +78,8 @@ public class CMSViewer {
             activeHours.put(streamer, Double.parseDouble(obj1.get("active").toString()));
             inactiveHours.put(streamer, Double.parseDouble(obj1.get("inactive").toString()));
         }
+
+        Logger.info("[ProfileLoad] Loading profile for: " + username);
     }
 
     public String getJSON(){

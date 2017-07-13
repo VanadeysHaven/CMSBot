@@ -1,5 +1,7 @@
 package me.Cooltimmetje.CMSBot;
 
+import me.Cooltimmetje.CMSBot.Profiles.CMSViewer;
+import me.Cooltimmetje.CMSBot.Profiles.ProfileManager;
 import me.Cooltimmetje.CMSBot.Utilities.Constants;
 import me.Cooltimmetje.CMSBot.Utilities.Logger;
 import org.jibble.pircbot.IrcException;
@@ -37,6 +39,7 @@ public class CMSBotTwitch extends PircBot {
         Logger.info("Connected to Twitch, Joining channels...");
 
         joinChannel("#" + Constants.twitchBot);
+        sendRawLine("CAP REQ :twitch.tv/membership");
     }
 
     /**
@@ -65,9 +68,19 @@ public class CMSBotTwitch extends PircBot {
     @Override
     @SuppressWarnings("ConstantConditions")
     protected void onMessage(String channel, String sender, String login, String hostname, String message) {
-        if(message.startsWith("!riot")){
-            sendMessage(channel, "(╯°□°）╯︵ ┻━┻");
+        CMSViewer viewer = ProfileManager.getViewer(sender, true);
+        if(!viewer.getActiveIn().contains(channel.substring(1))){
+            viewer.getActiveIn().add(channel.substring(1));
         }
+        if(!viewer.getPresentIn().contains(channel.substring(1))){
+            viewer.getPresentIn().add(channel.substring(1));
+        }
+        if (!viewer.getActiveHours().containsKey(channel.substring(1))) {
+            viewer.getActiveHours().put(channel.substring(1), 0.0);
+            viewer.getInactiveHours().put(channel.substring(1), 0.0);
+        }
+
+        Logger.info(channel + " | " + sender + ": " + message);
     }
 
 
@@ -81,7 +94,16 @@ public class CMSBotTwitch extends PircBot {
      */
     @Override
     protected void onJoin(String channel, String sender, String login, String hostname){
-        Logger.info("Joined channel: " + channel);
+        Logger.info(sender + " joined channel: " + channel);
+
+        CMSViewer viewer = ProfileManager.getViewer(sender, true);
+        if(!viewer.getPresentIn().contains(channel.substring(1))) {
+            viewer.getPresentIn().add(channel.substring(1));
+        }
+        if (!viewer.getActiveHours().containsKey(channel.substring(1))) {
+            viewer.getActiveHours().put(channel.substring(1), 0.0);
+            viewer.getInactiveHours().put(channel.substring(1), 0.0);
+        }
     }
 
     /**
@@ -94,7 +116,10 @@ public class CMSBotTwitch extends PircBot {
      */
     @Override
     protected void onPart(String channel, String sender, String login, String hostname){
-        Logger.info("Left channel: " + channel);
+        Logger.info(sender + " left channel: " + channel);
+
+        ProfileManager.getViewer(sender, true).getPresentIn().remove(channel.substring(1));
+        ProfileManager.getViewer(sender, true).getActiveIn().remove(channel.substring(1));
     }
 
     /**

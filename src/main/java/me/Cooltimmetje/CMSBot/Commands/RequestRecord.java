@@ -49,7 +49,7 @@ public class RequestRecord {
                     inactiveTotal += inactive;
                     totalOverall += total;
 
-                    embed.appendField("__" + s + "__", active + " / " + inactive + " / " + MiscUtils.round(total, 1), true);
+                    embed.appendField((viewer.getPresentIn().contains(s) ? ">" : "") + (viewer.getActiveIn().contains(s) ? ">" : "") + " __" + s + "__", active + " / " + inactive + " / " + MiscUtils.round(total, 1), true);
                 }
 
                 embed.appendField("__Total:__", MiscUtils.round(activeTotal, 1) + " / " + MiscUtils.round(inactiveTotal, 1) + " / " + MiscUtils.round(totalOverall, 1), false);
