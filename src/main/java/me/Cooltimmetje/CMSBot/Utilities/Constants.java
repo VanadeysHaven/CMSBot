@@ -20,6 +20,7 @@ public class Constants {
     public static int HOUR_COUNT_DELAY = 360000;
 
     public static ArrayList<String> twitchChannels = new ArrayList<>();
+    public static ArrayList<String> botAccounts = new ArrayList<>();
 
     public static String twitchBot;
     public static String twitchOauth;

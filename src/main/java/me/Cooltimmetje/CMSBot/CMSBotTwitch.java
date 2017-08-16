@@ -1,5 +1,8 @@
 package me.Cooltimmetje.CMSBot;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+import me.Cooltimmetje.CMSBot.Commands.GiveawayEnter;
+import me.Cooltimmetje.CMSBot.Commands.GiveawayOptOut;
 import me.Cooltimmetje.CMSBot.Profiles.CMSViewer;
 import me.Cooltimmetje.CMSBot.Profiles.ProfileManager;
 import me.Cooltimmetje.CMSBot.Utilities.Constants;
@@ -29,6 +32,7 @@ public class CMSBotTwitch extends PircBot {
     public CMSBotTwitch() {
         this.setName(Constants.twitchBot);
         this.setLogin(Constants.twitchBot);
+        this.setMessageDelay(1000);
     }
 
     /**
@@ -68,11 +72,16 @@ public class CMSBotTwitch extends PircBot {
     @Override
     @SuppressWarnings("ConstantConditions")
     protected void onMessage(String channel, String sender, String login, String hostname, String message) {
+        if(Constants.botAccounts.contains(sender)){
+            Logger.info(sender + " is on the bot list, ignoring...");
+            return;
+        }
+
         CMSViewer viewer = ProfileManager.getViewer(sender, true);
-        if(!viewer.getActiveIn().contains(channel.substring(1))){
+        if (!viewer.getActiveIn().contains(channel.substring(1))) {
             viewer.getActiveIn().add(channel.substring(1));
         }
-        if(!viewer.getPresentIn().contains(channel.substring(1))){
+        if (!viewer.getPresentIn().contains(channel.substring(1))) {
             viewer.getPresentIn().add(channel.substring(1));
         }
         if (!viewer.getActiveHours().containsKey(channel.substring(1))) {
@@ -81,6 +90,12 @@ public class CMSBotTwitch extends PircBot {
         }
 
         Logger.info(channel + " | " + sender + ": " + message);
+
+        if(message.toLowerCase().startsWith("!giveaway enter")){
+            GiveawayEnter.run(sender, channel);
+        } else if (message.toLowerCase().startsWith("!giveaway optout")){
+            GiveawayOptOut.run(sender, channel);
+        }
     }
 
 
@@ -95,6 +110,11 @@ public class CMSBotTwitch extends PircBot {
     @Override
     protected void onJoin(String channel, String sender, String login, String hostname){
         Logger.info(sender + " joined channel: " + channel);
+
+        if(Constants.botAccounts.contains(sender)){
+            Logger.info(sender + " is on the bot list, ignoring...");
+            return;
+        }
 
         CMSViewer viewer = ProfileManager.getViewer(sender, true);
         if(!viewer.getPresentIn().contains(channel.substring(1))) {
@@ -117,6 +137,11 @@ public class CMSBotTwitch extends PircBot {
     @Override
     protected void onPart(String channel, String sender, String login, String hostname){
         Logger.info(sender + " left channel: " + channel);
+
+        if(Constants.botAccounts.contains(sender)){
+            Logger.info(sender + " is on the bot list, ignoring...");
+            return;
+        }
 
         ProfileManager.getViewer(sender, true).getPresentIn().remove(channel.substring(1));
         ProfileManager.getViewer(sender, true).getActiveIn().remove(channel.substring(1));
@@ -152,10 +177,10 @@ public class CMSBotTwitch extends PircBot {
      * Used to send a message.
      *
      * @param message The message that we want to send.
-     * @param channel The channel where we want to send. (Without #)
+     * @param channel The channel where we want to send.
      */
     public void send(String message, String channel){
-        sendMessage("#" + channel, message);
+        sendMessage(channel, message);
     }
 
     /**

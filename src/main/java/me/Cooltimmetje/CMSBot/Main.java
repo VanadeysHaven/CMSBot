@@ -2,6 +2,7 @@ package me.Cooltimmetje.CMSBot;
 
 import me.Cooltimmetje.CMSBot.Profiles.MySqlManager;
 import me.Cooltimmetje.CMSBot.Timers.HourTimer;
+import me.Cooltimmetje.CMSBot.Timers.ProfileTimer;
 import me.Cooltimmetje.CMSBot.Utilities.Constants;
 import org.jibble.pircbot.IrcException;
 import org.slf4j.Logger;
@@ -72,6 +73,7 @@ public class Main {
         }
 
         timer.schedule(new HourTimer(), Constants.HOUR_COUNT_DELAY, Constants.HOUR_COUNT_DELAY);
+        timer.schedule(new ProfileTimer(), 600000, 600000);
 
     }
 

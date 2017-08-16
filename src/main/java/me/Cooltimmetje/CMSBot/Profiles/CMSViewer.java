@@ -49,12 +49,23 @@ public class CMSViewer {
     public HashMap<String,Double> inactiveHours = new HashMap<>();
 
     /**
+     * When true, the person has entered in the current giveaway.
+     */
+    public boolean entered;
+    /**
+     * When true, we will not track hours from this person.
+     */
+    public boolean optedOut;
+
+    /**
      * Constructing the viewer instance without existing data.
      *
      * @param username The username of the viewer.
      */
     public CMSViewer(String username){
         this.username = username;
+        this.entered = false;
+        this.optedOut = false;
 
         Logger.info("[ProfileCreate] Creating new profile for: " + username);
     }
@@ -79,6 +90,18 @@ public class CMSViewer {
             inactiveHours.put(streamer, Double.parseDouble(obj1.get("inactive").toString()));
         }
 
+        if(obj.get("entered") != null){
+            this.entered = Boolean.parseBoolean(obj.get("entered").toString());
+        } else {
+            this.entered = false;
+        }
+        if(obj.get("optedOut") != null){
+            this.optedOut = Boolean.parseBoolean(obj.get("optedOut").toString());
+        } else {
+            this.optedOut = false;
+        }
+
+
         Logger.info("[ProfileLoad] Loading profile for: " + username);
     }
 
@@ -95,6 +118,8 @@ public class CMSViewer {
             hours.add(obj1);
         }
         obj.put("hours", hours);
+        obj.put("entered", this.entered);
+        obj.put("optedOut", this.optedOut);
 
         return obj.toJSONString();
     }

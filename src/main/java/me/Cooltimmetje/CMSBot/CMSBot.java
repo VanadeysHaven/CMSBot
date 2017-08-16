@@ -77,6 +77,7 @@ public class CMSBot {
             cmsBot.getDispatcher().registerListener(new MessagesUtils());
 
             MySqlManager.getChannels();
+            MySqlManager.getBots();
 
             listenersReady = true;
             Runtime.getRuntime().addShutdownHook(new Thread(() -> terminate(true)));

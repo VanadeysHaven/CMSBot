@@ -1,5 +1,7 @@
 package me.Cooltimmetje.CMSBot.Profiles;
 
+import me.Cooltimmetje.CMSBot.Utilities.Logger;
+
 import java.util.HashMap;
 
 /**
@@ -31,6 +33,11 @@ public class ProfileManager {
             profiles.put(username, viewer); //Add the loaded viewer to memory.
             return viewer; //Return it.
         }
+    }
+
+    public static void clearProfile(String username){
+        profiles.remove(username);
+        Logger.info("[ProfileClear] Cleared profile for: " + username);
     }
 
 }

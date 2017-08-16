@@ -4,6 +4,7 @@ import me.Cooltimmetje.CMSBot.Enums.EmojiEnum;
 import me.Cooltimmetje.CMSBot.Main;
 import me.Cooltimmetje.CMSBot.Profiles.CMSViewer;
 import me.Cooltimmetje.CMSBot.Profiles.ProfileManager;
+import me.Cooltimmetje.CMSBot.Utilities.Constants;
 import me.Cooltimmetje.CMSBot.Utilities.MessagesUtils;
 import me.Cooltimmetje.CMSBot.Utilities.MiscUtils;
 import sx.blah.discord.handle.obj.IMessage;
@@ -21,6 +22,10 @@ public class RequestRecord {
     public static void run(String command, IMessage message){
         String[] args = command.split(" ");
         if(args.length > 1){
+            if(Constants.botAccounts.contains(args[1].toLowerCase())){
+                MessagesUtils.addReaction(message, "This account is a bot: " + args[1], EmojiEnum.X);
+                return;
+            }
             CMSViewer viewer = ProfileManager.getViewer(args[1].toLowerCase(), false);
             if(viewer == null){
                 MessagesUtils.addReaction(message, "No viewing record found: " + args[1], EmojiEnum.X);
@@ -49,10 +54,13 @@ public class RequestRecord {
                     inactiveTotal += inactive;
                     totalOverall += total;
 
-                    embed.appendField((viewer.getPresentIn().contains(s) ? ">" : "") + (viewer.getActiveIn().contains(s) ? ">" : "") + " __" + s + "__", active + " / " + inactive + " / " + MiscUtils.round(total, 1), true);
+                    embed.appendField((viewer.getPresentIn().contains(s) ? ">" : "") + (viewer.getActiveIn().contains(s) ? ">" : "") + " __" + s + "__", MiscUtils.round(active, 1) + " / " + MiscUtils.round(inactive, 1) + " / " + MiscUtils.round(total, 1), true);
                 }
 
                 embed.appendField("__Total:__", MiscUtils.round(activeTotal, 1) + " / " + MiscUtils.round(inactiveTotal, 1) + " / " + MiscUtils.round(totalOverall, 1), false);
+
+                embed.appendField("__Is entered:__", viewer.isEntered() ? EmojiEnum.WHITE_CHECK_MARK.getEmoji() : EmojiEnum.X.getEmoji(), true);
+                embed.appendField("__Is opted-out:__", viewer.isOptedOut() ? EmojiEnum.WHITE_CHECK_MARK.getEmoji() : EmojiEnum.X.getEmoji(), true);
 
                 message.getChannel().sendMessage("", embed.build(), false);
             }

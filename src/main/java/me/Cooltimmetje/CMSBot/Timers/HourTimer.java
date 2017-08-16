@@ -21,10 +21,12 @@ public class HourTimer extends TimerTask {
 
         for(CMSViewer viewer : ProfileManager.profiles.values()){
             for(String s : viewer.getPresentIn()){
-                if(viewer.getActiveIn().contains(s)){
-                    viewer.getActiveHours().put(s, viewer.getActiveHours().get(s) + 0.1);
-                } else {
-                    viewer.getInactiveHours().put(s, viewer.getInactiveHours().get(s) + 0.1);
+                if(!viewer.isOptedOut()) {
+                    if (viewer.getActiveIn().contains(s)) {
+                        viewer.getActiveHours().put(s, viewer.getActiveHours().get(s) + 0.1);
+                    } else {
+                        viewer.getInactiveHours().put(s, viewer.getInactiveHours().get(s) + 0.1);
+                    }
                 }
             }
             viewer.getActiveIn().clear();

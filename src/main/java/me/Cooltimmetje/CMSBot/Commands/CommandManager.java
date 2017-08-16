@@ -31,6 +31,9 @@ public class CommandManager {
                 case "channels":
                     TwitchChannelManager.run(command, event.getMessage());
                     break;
+                case "bots":
+                    TwitchBotManager.run(command, event.getMessage());
+                    break;
             }
         }
     }

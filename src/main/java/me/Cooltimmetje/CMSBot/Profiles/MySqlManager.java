@@ -264,4 +264,125 @@ public class MySqlManager {
         }
     }
 
+    /**
+     * Add a new Bot Account to the database.
+     *
+     * @param botName The bot account to be added.
+     */
+    public static void addBot(String botName){
+        Connection c = null;
+        PreparedStatement ps = null;
+
+        String query = "INSERT INTO bot_accounts VALUES(?);";
+
+        try {
+            c = hikari.getConnection();
+            ps = c.prepareStatement(query);
+
+            ps.setString(1, botName);
+
+            ps.execute();
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            if(c != null){
+                try {
+                    c.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(ps != null){
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * Remove a Bot Account from the database.
+     *
+     * @param botName The bot account to be removed.
+     */
+    public static void removeBot(String botName){
+        Connection c = null;
+        PreparedStatement ps = null;
+
+        String query = "DELETE FROM bot_accounts WHERE bot_name=?;";
+
+        try {
+            c = hikari.getConnection();
+            ps = c.prepareStatement(query);
+
+            ps.setString(1, botName);
+
+            ps.execute();
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            if(c != null){
+                try {
+                    c.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(ps != null){
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void getBots(){
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String query = "SELECT * FROM bot_accounts;";
+
+        try {
+            c = hikari.getConnection();
+            ps = c.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while(rs.next()){
+                Constants.botAccounts.add(rs.getString(1));
+            }
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            if(c != null){
+                try {
+                    c.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(ps != null){
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+
 }
